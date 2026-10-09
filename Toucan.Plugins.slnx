@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Toucan.Connector.Rest/Toucan.Connector.Rest.csproj" />
+    <Project Path="src/Toucan.Connector.Rest.Desktop/Toucan.Connector.Rest.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Toucan.Connector.Rest.Tests/Toucan.Connector.Rest.Tests.csproj" />
+  </Folder>
+</Solution>

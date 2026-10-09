@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>Toucan.Connector.Rest</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Toucan supplies the contract at run time; it must not be copied next to the plugin. -->
+    <PackageReference Include="Toucan.Plugins.Abstractions" Version="1.1.0" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="plugin.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Toucan.Connector.Rest.Desktop\Toucan.Connector.Rest.Desktop.csproj" ReferenceOutputAssembly="false" OutputItemType="DesktopPart" />
+  </ItemGroup>
+  <Target Name="CopyDesktopPart" AfterTargets="Build">
+    <Copy SourceFiles="@(DesktopPart)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>
