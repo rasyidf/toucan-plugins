@@ -1,0 +1,41 @@
+name: CI
+
+# Builds and tests the connector against the Toucan SDK packages. The packages come from
+# ./feed (committed) until they are published to NuGet.org, at which point nuget.config also
+# resolves them from there. This repository has no access to the Toucan application source,
+# which is the point: it is in the same position as a third-party plugin author.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Toucan.Plugins.slnx
+
+      - name: Test
+        run: dotnet test Toucan.Plugins.slnx --configuration Release
+
+      # Produces dist/toucan-plugins.rest-connector, the folder a user copies into
+      # Documents/Toucan/plugins. Non-Windows only: build.sh is a POSIX shell script.
+      - name: Build plugin folder
+        if: runner.os != 'Windows'
+        run: ./build.sh
